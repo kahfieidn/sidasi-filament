@@ -1,0 +1,180 @@
+<?php
+
+namespace App\Filament\Resources;
+
+use Filament\Forms;
+use Filament\Tables;
+use App\Models\Sektor;
+use Filament\Forms\Form;
+use Filament\Tables\Table;
+use App\Models\LaporIzinOss;
+use Filament\Resources\Resource;
+use Filament\Forms\Components\Section;
+use Filament\Forms\Components\Fieldset;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\SoftDeletingScope;
+use App\Filament\Resources\LaporIzinOssResource\Pages;
+use App\Filament\Resources\LaporIzinOssResource\RelationManagers;
+
+class LaporIzinOssResource extends Resource
+{
+    protected static ?string $model = LaporIzinOss::class;
+
+    protected static ?string $navigationIcon = 'heroicon-o-paper-airplane';
+    protected static ?string $navigationGroup = 'Pelaporan OSS';
+    protected static ?string $pluralModelLabel = 'Lapor Izin OSS';
+    protected static ?int $navigationSort = 5;
+
+    public static function form(Form $form): Form
+    {
+        return $form
+            ->schema([
+                Section::make()
+                    ->schema([
+                        Forms\Components\Select::make('jenis_oss')
+                            ->options([
+                                'Perizinan' => 'Perizinan',
+                            ])
+                            ->required()
+                            ->native(false),
+                        Forms\Components\FileUpload::make('berkas')
+                            ->required()
+                            ->openable()
+                            ->directory('lapor_izin_oss'),
+                        Forms\Components\Select::make('bulan')
+                            ->options([
+                                'Januari' => 'Januari',
+                                'Februari' => 'Februari',
+                                'Maret' => 'Maret',
+                                'April' => 'April',
+                                'Mei' => 'Mei',
+                                'Juni' => 'Juni',
+                                'Juli' => 'Juli',
+                                'Agustus' => 'Agustus',
+                                'September' => 'September',
+                                'Oktober' => 'Oktober',
+                                'November' => 'November',
+                                'Desember' => 'Desember',
+                            ])
+                            ->required()
+                            ->native(false),
+                        Forms\Components\Select::make('tahun')
+                            ->options([
+                                '2024' => '2024',
+                                '2025' => '2025',
+                                '2026' => '2026',
+                                '2027' => '2027',
+                            ])
+                            ->required()
+                            ->native(false),
+                        Forms\Components\TextInput::make('jumlah_data')
+                            ->helperText('*Bidang ini otomatis terisi dan dihitung berdasarkan jumlah data sektor yang diinputkan.')
+                            ->readOnly()
+                            ->columnSpanFull()
+                            ->disabled()
+                            ->dehydrated()
+                            ->numeric(),
+                    ])->columns(2),
+                Section::make()
+                    ->schema([
+                        Forms\Components\Repeater::make('data_sektor_osses')
+                            ->relationship('data_sektor_osses')
+                            ->schema([
+                                Forms\Components\Select::make('sektor_id')
+                                    ->label('Sektor')
+                                    ->options(Sektor::query()->pluck('nama_sektor', 'id'))
+                                    ->searchable()
+                                    ->required(),
+                                Forms\Components\TextInput::make('jumlah_data_sektor')
+                                    ->label('Jumlah Data Sektor')
+                                    ->numeric()
+                                    ->debounce(1200)
+                                    ->nullable(),
+                            ])
+                            ->columns(2)
+                            ->minItems(1)
+                            ->createItemButtonLabel('Tambah Data Sektor')
+                            ->afterStateUpdated(function ($state, callable $get, callable $set) {
+                                $totalJumlahData = collect($state)
+                                    ->pluck('jumlah_data_sektor')
+                                    ->filter()
+                                    ->sum(); // Jumlahkan semua nilai jumlah_data_sektor yang ada
+                                $set('jumlah_data', $totalJumlahData);
+                            }),
+                    ]),
+
+            ]);
+    }
+
+    public static function table(Table $table): Table
+    {
+        return $table
+            ->columns([
+                Tables\Columns\TextColumn::make('berkas')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('jenis_oss')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('bulan')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('tahun')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('jumlah_data')
+                    ->numeric()
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('user_id')
+                    ->numeric()
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('deleted_at')
+                    ->dateTime()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+                Tables\Columns\TextColumn::make('created_at')
+                    ->dateTime()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+                Tables\Columns\TextColumn::make('updated_at')
+                    ->dateTime()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+            ])
+            ->filters([
+                Tables\Filters\TrashedFilter::make(),
+            ])
+            ->actions([
+                Tables\Actions\ViewAction::make(),
+                Tables\Actions\EditAction::make(),
+            ])
+            ->bulkActions([
+                Tables\Actions\BulkActionGroup::make([
+                    Tables\Actions\DeleteBulkAction::make(),
+                    Tables\Actions\ForceDeleteBulkAction::make(),
+                    Tables\Actions\RestoreBulkAction::make(),
+                ]),
+            ]);
+    }
+
+    public static function getRelations(): array
+    {
+        return [
+            //
+        ];
+    }
+
+    public static function getPages(): array
+    {
+        return [
+            'index' => Pages\ListLaporIzinOsses::route('/'),
+            'create' => Pages\CreateLaporIzinOss::route('/create'),
+            'view' => Pages\ViewLaporIzinOss::route('/{record}'),
+            'edit' => Pages\EditLaporIzinOss::route('/{record}/edit'),
+        ];
+    }
+
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()
+            ->withoutGlobalScopes([
+                SoftDeletingScope::class,
+            ]);
+    }
+}

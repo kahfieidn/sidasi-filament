@@ -3,12 +3,15 @@
 namespace App\Filament\Resources;
 
 use Filament\Forms;
+use App\Models\User;
 use Filament\Tables;
 use App\Models\Sektor;
 use Filament\Forms\Form;
 use Filament\Tables\Table;
 use App\Models\LaporIzinOss;
 use Filament\Resources\Resource;
+use Filament\Tables\Actions\Action;
+use Illuminate\Support\Facades\Auth;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Fieldset;
 use Illuminate\Database\Eloquent\Builder;
@@ -78,17 +81,19 @@ class LaporIzinOssResource extends Resource
                 Section::make()
                     ->schema([
                         Forms\Components\Repeater::make('data_sektor_osses')
+                            ->label('Data Sektor')
                             ->relationship('data_sektor_osses')
                             ->schema([
                                 Forms\Components\Select::make('sektor_id')
                                     ->label('Sektor')
                                     ->options(Sektor::query()->pluck('nama_sektor', 'id'))
+                                    ->disableOptionsWhenSelectedInSiblingRepeaterItems()
                                     ->searchable()
+                                    ->live()
                                     ->required(),
                                 Forms\Components\TextInput::make('jumlah_data_sektor')
                                     ->label('Jumlah Data Sektor')
                                     ->numeric()
-                                    ->debounce(1200)
                                     ->nullable(),
                             ])
                             ->columns(2)
@@ -121,9 +126,9 @@ class LaporIzinOssResource extends Resource
                 Tables\Columns\TextColumn::make('jumlah_data')
                     ->numeric()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('user_id')
-                    ->numeric()
-                    ->sortable(),
+                Tables\Columns\TextColumn::make('user.name')
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('deleted_at')
                     ->dateTime()
                     ->sortable()
@@ -141,8 +146,14 @@ class LaporIzinOssResource extends Resource
                 Tables\Filters\TrashedFilter::make(),
             ])
             ->actions([
-                Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
+                Action::make('unduh_berkas')
+                    ->button()
+                    ->color('warning')
+                    ->action(function (LaporIzinOss $lapor_izin_oss) {
+                        $lapor_izin = LaporIzinOss::find($lapor_izin_oss->id);
+                        return response()->download(storage_path('app/public/' . $lapor_izin->berkas));
+                    })
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -172,9 +183,17 @@ class LaporIzinOssResource extends Resource
 
     public static function getEloquentQuery(): Builder
     {
-        return parent::getEloquentQuery()
+        $query =  parent::getEloquentQuery()
             ->withoutGlobalScopes([
                 SoftDeletingScope::class,
             ]);
+        $role_user_check = User::whereId(Auth::id())->first()->roles->pluck('name')->first();
+        if ($role_user_check == 'super_admin' || $role_user_check == 'admin') {
+            return $query;
+        } else if ($role_user_check == 'operator') {
+            return $query->whereUserId(Auth::id());
+        } else {
+            return abort(403);
+        }
     }
 }

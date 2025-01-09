@@ -28,8 +28,6 @@ class ListLaporIzins extends ListRecords
         ];
     }
 
-
-
     protected function getHeaderActions(): array
     {
         return [

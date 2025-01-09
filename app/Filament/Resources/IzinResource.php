@@ -4,11 +4,17 @@ namespace App\Filament\Resources;
 
 use Filament\Forms;
 use App\Models\Izin;
+use App\Models\User;
 use Filament\Tables;
 use Filament\Forms\Form;
+use App\Models\LaporIzin;
 use Filament\Tables\Table;
 use Filament\Resources\Resource;
+use Filament\Actions\DeleteAction;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Auth;
 use Filament\Forms\Components\Section;
+use Filament\Notifications\Notification;
 use Illuminate\Database\Eloquent\Builder;
 use App\Filament\Resources\IzinResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
@@ -80,7 +86,24 @@ class IzinResource extends Resource
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                    Tables\Actions\DeleteBulkAction::make()
+                        ->action(function (Collection $records) {
+                            $records->each(function ($record) {
+                                $lapor_izin = LaporIzin::whereIzinId($record->id)
+                                    ->whereUserId(Auth::id())
+                                    ->get();
+
+                                if ($lapor_izin->isNotEmpty()) {
+                                    Notification::make()
+                                        ->warning()
+                                        ->title('Anda memiliki pelaporan dengan izin ini!')
+                                        ->body('Untuk melanjutkan, silahkan hapus data pelaporan izin dengan nama izin ini.')
+                                        ->send();
+                                    return false;
+                                }
+                                $record->delete();
+                            });
+                        }),
                     Tables\Actions\ForceDeleteBulkAction::make(),
                     Tables\Actions\RestoreBulkAction::make(),
                 ]),
@@ -106,9 +129,17 @@ class IzinResource extends Resource
 
     public static function getEloquentQuery(): Builder
     {
-        return parent::getEloquentQuery()
+        $query =  parent::getEloquentQuery()
             ->withoutGlobalScopes([
                 SoftDeletingScope::class,
             ]);
+        $role_user_check = User::whereId(Auth::id())->first()->roles->pluck('name')->first();
+        if ($role_user_check == 'super_admin' || $role_user_check == 'admin') {
+            return $query;
+        } else if ($role_user_check == 'operator') {
+            return $query->whereUserId(Auth::id());
+        } else {
+            return abort(403);
+        }
     }
 }

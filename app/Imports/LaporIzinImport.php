@@ -68,7 +68,7 @@ class LaporIzinImport implements ToCollection, WithHeadingRow, SkipsEmptyRows
                             Action::make('view')
                                 ->label('Daftarkan Izin')
                                 ->button()
-                                ->url('/app/izins', shouldOpenInNewTab: true),
+                                ->url('/app/izins'),
                             Action::make('undo')
                                 ->color('gray')
                                 ->label('Tutup')
@@ -105,6 +105,7 @@ class LaporIzinImport implements ToCollection, WithHeadingRow, SkipsEmptyRows
             LaporIzin::create([
                 'nama_perusahaan' => $row['nama_perusahaan_or_perorangan'],
                 'alamat_perusahaan' => $row['alamat_perusahaan_or_perorangan'],
+                'alamat_proyek' => $row['alamat_proyek'],
                 'tanggal_masuk' => $tanggalMasuk,
                 'tanggal_izin' => $tanggalIzin,
                 'nomor_izin' => $row['nomor_izin'],

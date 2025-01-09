@@ -17,7 +17,6 @@ class JenisIzinResource extends Resource
 {
     protected static ?string $model = JenisIzin::class;
     protected static ?string $navigationGroup = 'Konfigurasi';
-    protected static ?string $navigationIcon = 'heroicon-o-cog-6-tooth';
     protected static ?int $navigationSort = 1;    
 
     public static function form(Form $form): Form

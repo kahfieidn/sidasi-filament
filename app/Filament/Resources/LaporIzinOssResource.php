@@ -14,6 +14,8 @@ use Filament\Tables\Actions\Action;
 use Illuminate\Support\Facades\Auth;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Fieldset;
+use Filament\Tables\Enums\FiltersLayout;
+use Filament\Tables\Filters\SelectFilter;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\LaporIzinOssResource\Pages;
@@ -144,7 +146,62 @@ class LaporIzinOssResource extends Resource
             ])
             ->filters([
                 Tables\Filters\TrashedFilter::make(),
-            ])
+                SelectFilter::make('jenis_oss')
+                    ->options([
+                        'Perizinan' => 'Perizinan',
+                    ])
+                    ->searchable()
+                    ->multiple(),
+                SelectFilter::make('bulan')
+                    ->options([
+                        'Januari' => 'Januari',
+                        'Februari' => 'Februari',
+                        'Maret' => 'Maret',
+                        'April' => 'April',
+                        'Mei' => 'Mei',
+                        'Juni' => 'Juni',
+                        'Juli' => 'Juli',
+                        'Agustus' => 'Agustus',
+                        'September' => 'September',
+                        'Oktober' => 'Oktober',
+                        'November' => 'November',
+                        'Desember' => 'Desember',
+                    ])
+                    ->searchable()
+                    ->multiple(),
+                SelectFilter::make('tahun')
+                    ->options([
+                        '2023' => '2023',
+                        '2024' => '2024',
+                        '2025' => '2025',
+                        '2026' => '2026',
+                        '2027' => '2027',
+                        '2028' => '2028',
+                        '2029' => '2029',
+                        '2030' => '2030',
+                        '2031' => '2031',
+                        '2032' => '2032',
+                        '2033' => '2033',
+                    ])
+                    ->searchable()
+                    ->multiple(),
+                Tables\Filters\SelectFilter::make('user_id')
+                    ->searchable()
+                    ->hidden(fn() => Auth::user()->hasRole('operator'))
+                    ->preload()
+                    ->label('User')
+                    ->options(
+                        User::whereHas('roles', function ($query) {
+                            $query->where('name', 'operator');
+                        })->get()->pluck('name', 'id')
+                    )
+                    ->multiple(),
+            ], layout: FiltersLayout::AboveContent)
+            ->filtersTriggerAction(
+                fn(Action $action) => $action
+                    ->button()
+                    ->label('Filter'),
+            )->filtersFormColumns(auth()->user()->hasRole('operator') ? 4 : 5)
             ->actions([
                 Tables\Actions\EditAction::make(),
                 Action::make('unduh_berkas')

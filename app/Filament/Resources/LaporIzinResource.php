@@ -91,6 +91,7 @@ class LaporIzinResource extends Resource
                     ->searchable(),
                 Tables\Columns\TextColumn::make('alamat_proyek')
                     ->wrap()
+                    ->toggleable(isToggledHiddenByDefault: true)
                     ->searchable(),
                 Tables\Columns\TextColumn::make('tanggal_masuk')
                     ->date()

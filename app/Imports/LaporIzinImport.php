@@ -2,11 +2,7 @@
 
 namespace App\Imports;
 
-use Exception;
-use Carbon\Carbon;
 use App\Models\Izin;
-use App\Models\User;
-use App\Models\Sektor;
 use App\Models\LaporIzin;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;

@@ -73,6 +73,7 @@ class LaporIzinResource extends Resource
                                 titleAttribute: 'nama_izin',
                                 modifyQueryUsing: fn(Builder $query) => $query->whereUserId(Auth::id()),
                             )
+                            ->native(false)
                             ->preload()
                             ->searchable(),
                     ])->columns(2)

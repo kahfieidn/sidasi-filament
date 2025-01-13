@@ -23,8 +23,8 @@ jobs:
     # - name: Cache Clearing
     #   run: php artisan cache:clear
 
-    - name: Queue
-      run: php artisan queue:work
+    # - name: Queue
+    #   run: php artisan queue:work
 
     - name: Generate App Key
       run: php artisan key:generate

@@ -192,7 +192,7 @@
                 </div>
                 <div class="col-lg-7 col-xl-6">
                     <div class="hero-img">
-                        <img class="animate-one" src="assets/images/hero/1.png" alt="img_not_found" data-aos="zoom-in" data-aos-delay="100" />
+                        <img class="animate-one" src="/assets/images/hero/1.png" alt="img_not_found" data-aos="zoom-in" data-aos-delay="100" />
                         <div class="position-absolute animate-two">
                             <img data-aos="fade-up" data-aos-delay="600" src="assets/images/hero/2.png" alt="img_not_found" />
                         </div>

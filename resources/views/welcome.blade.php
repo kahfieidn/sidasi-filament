@@ -38,7 +38,7 @@
                 <nav id="offcanvas-menu" class="offcanvas-menu">
                     <ul>
                         <li>
-                            <a href="index.html">Home</a>
+                            <a href="/">Home</a>
                             <!-- add your sub menu here -->
                         </li>
                         <li>
@@ -132,7 +132,7 @@
             <div class="container">
                 <div class="row align-items-center">
                     <div class="col">
-                        <a href="index.html" class="brand-logo">
+                        <a href="/" class="brand-logo">
                             <img style="width: 150px;" src="assets/logo-sidasi.png" alt="brand logo" />
                         </a>
                     </div>
@@ -407,7 +407,7 @@
                             <div class="footer-row">
                                 <div class="footer-col">
                                     <div class="footer-widget">
-                                        <a class="footer-logo" href="index.html">
+                                        <a class="footer-logo" href="/">
                                             <img style="width: 200px;" src="assets/logo-sidasi.png" alt="logo_not_found" />
                                         </a>
 

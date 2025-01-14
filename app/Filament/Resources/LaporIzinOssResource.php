@@ -127,7 +127,6 @@ class LaporIzinOssResource extends Resource
                     ->searchable(),
                 Tables\Columns\TextColumn::make('jumlah_data')
                     ->numeric()
-                    ->required()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('user.name')
                     ->sortable()

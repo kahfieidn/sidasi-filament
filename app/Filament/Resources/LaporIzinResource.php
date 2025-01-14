@@ -70,6 +70,7 @@ class LaporIzinResource extends Resource
                                 modifyQueryUsing: fn(Builder $query) => $query->whereUserId(Auth::id()),
                             )
                             ->native(false)
+                            ->required()
                             ->preload()
                             ->searchable(),
                     ])->columns(2)

@@ -96,7 +96,7 @@ class LaporIzinOssResource extends Resource
                                 Forms\Components\TextInput::make('jumlah_data_sektor')
                                     ->label('Jumlah Data Sektor')
                                     ->numeric()
-                                    ->nullable(),
+                                    ->required(),
                             ])
                             ->columns(2)
                             ->minItems(1)

@@ -39,7 +39,7 @@ class LaporIzinResource extends Resource
                             ->required()
                             ->columnSpanFull()
                             ->maxLength(255),
-                        Forms\Components\TextArea::make('alamat_perusahaan')
+                        Forms\Components\Textarea::make('alamat_perusahaan')
                             ->columnSpan(2)
                             ->required(),
                         Forms\Components\Toggle::make('is_alamat_proyek')
@@ -51,7 +51,7 @@ class LaporIzinResource extends Resource
                             ->afterStateUpdated(function (callable $set, $state) {
                                 $set('is_alamat_proyek', $state); // Menyimpan status toggle
                             }),
-                        Forms\Components\TextArea::make('alamat_proyek')
+                        Forms\Components\Textarea::make('alamat_proyek')
                             ->label('Alamat Proyek')
                             ->maxLength(255)
                             ->columnSpanFull()

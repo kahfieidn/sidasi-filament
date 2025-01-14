@@ -39,6 +39,9 @@
                         <li>
                             <a href="{{route('statistik_data_investasi')}}">Statistik Data Investasi</a>
                         </li>
+                        <li>
+                            <a href="/app">Login Sebagai Pengelola</a>
+                        </li>
                     </ul>
 
                     <div class="offcanvas-social">

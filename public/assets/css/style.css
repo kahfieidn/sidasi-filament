@@ -728,7 +728,7 @@ progress {
 }
 @media (min-width: 1200px) {
   .container-xl, .container-lg, .container-md, .container-sm, .container {
-    max-width: 1170px;
+    max-width: 1293px;
   }
 }
 .row {
@@ -3771,8 +3771,9 @@ textarea.form-control-lg {
     -webkit-box-flex: 0;
     -ms-flex: 0 0 auto;
     flex: 0 0 auto;
-    width: 50%;
+    width: 65%;
 }
+
 }
 @media (min-width: 1200px) {
   .dropdown-menu-xl-start {
@@ -15127,7 +15128,7 @@ button:focus {
 }
 
 .particle2 {
-  bottom: -125px;
+  bottom: -414px;
   left: 200px;
   z-index: -1;
   -webkit-animation: move 0.9s infinite alternate;

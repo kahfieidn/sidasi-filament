@@ -46,6 +46,26 @@ class LaporIzinImport implements ToCollection, WithHeadingRow, SkipsEmptyRows
                 $rules['tanggalIzin_' . $key] = 'required';
                 $customMessages['tanggalIzin_' . $key . '.required'] = 'Perhatikan "' . $row['tanggal_izin'] . '" Pada baris ' . ($key + 2) . ' tidak sesuai dengan format tanggal!';
             }
+
+            if ($row['nama_perusahaan_or_perorangan'] === null) {
+                $rules['nama_perusahaan_or_perorangan_' . $key] = 'required';
+                $customMessages['nama_perusahaan_or_perorangan_' . $key . '.required'] = 'Nama Perusahaan/Perorangan Wajib di Isi!';
+            }
+
+            if ($row['alamat_perusahaan_or_perorangan'] === null) {
+                $rules['alamat_perusahaan_or_perorangan_' . $key] = 'required';
+                $customMessages['alamat_perusahaan_or_perorangan_' . $key . '.required'] = 'Alamat Perusahaan/Perorangan Wajib di Isi!';
+            }
+
+            if ($row['nomor_izin'] === null) {
+                $rules['nomor_izin_' . $key] = 'required';
+                $customMessages['nomor_izin_' . $key . '.required'] = 'Nomor Izin Wajib di Isi!';
+            }
+
+            if ($row['jenis_izin'] === null) {
+                $rules['jenis_izin_' . $key] = 'required';
+                $customMessages['jenis_izin_' . $key . '.required'] = 'Jenis Izin Wajib di Isi!';
+            }
         }
 
 

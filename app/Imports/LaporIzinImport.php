@@ -68,7 +68,6 @@ class LaporIzinImport implements ToCollection, WithHeadingRow, SkipsEmptyRows
             }
         }
 
-
         // Jika ada aturan validasi, lakukan validasi untuk seluruh koleksi
         if (!empty($rules)) {
             $validator = Validator::make($collection->toArray(), $rules, $customMessages);

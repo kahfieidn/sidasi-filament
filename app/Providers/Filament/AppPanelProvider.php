@@ -4,6 +4,7 @@ namespace App\Providers\Filament;
 
 use App\Filament\Resources\LaporIzinOssResource;
 use App\Filament\Resources\LaporIzinResource;
+use App\Filament\Resources\SektorResource;
 use Filament\Http\Middleware\Authenticate;
 use BezhanSalleh\FilamentShield\FilamentShieldPlugin;
 use Filament\Http\Middleware\AuthenticateSession;
@@ -54,6 +55,7 @@ class AppPanelProvider extends PanelProvider
                 Widgets\FilamentInfoWidget::class,
                 LaporIzinResource\Widgets\LaporIzinChart::class,
                 LaporIzinOssResource\Widgets\LaporIzinOssChart::class,
+                SektorResource\Widgets\SektorOverview::class,
             ])
             ->middleware([
                 EncryptCookies::class,

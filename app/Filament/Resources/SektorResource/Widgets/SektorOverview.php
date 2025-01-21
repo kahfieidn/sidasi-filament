@@ -8,12 +8,14 @@ use App\Models\Sektor;
 use App\Models\LaporIzin;
 use Filament\Tables\Table;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Database\Query\Builder;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use App\Filament\Resources\SektorResource;
 use Filament\Tables\Columns\Summarizers\Sum;
 use Filament\Widgets\TableWidget as BaseWidget;
+use Filament\Tables\Columns\Summarizers\Summarizer;
 
 class SektorOverview extends BaseWidget
 {
@@ -26,7 +28,7 @@ class SektorOverview extends BaseWidget
         return $table
             ->query(
                 SektorResource::getEloquentQuery()
-            )->defaultSort('created_at', 'desc')->searchable()
+            )
             ->filters([
                 SelectFilter::make('user_id')
                     ->label('Filter User')
@@ -35,9 +37,10 @@ class SektorOverview extends BaseWidget
                     }),
             ])
             ->columns([
-                TextColumn::make('nama_sektor'),
+                TextColumn::make('nama_sektor')
+                    ->wrap(),
                 TextColumn::make('januari')
-                    ->label('Januari')
+                    ->label('Jan')
                     ->getStateUsing(function ($record) {
                         return \App\Models\LaporIzin::whereMonth('tanggal_izin', 1)
                             ->whereYear('tanggal_izin', 2024)
@@ -47,9 +50,13 @@ class SektorOverview extends BaseWidget
                             })
                             ->count();
                     })
-                    ->sortable(),
+                    ->summarize(Summarizer::make()
+                        ->using(fn(Builder $query): string => LaporIzin::query()
+                            ->whereMonth('tanggal_izin', 1)
+                            ->whereYear('tanggal_izin', 2024)
+                            ->whereUserId(Auth::id())->count())),
                 TextColumn::make('februari')
-                    ->label('Februari')
+                    ->label('Feb')
                     ->getStateUsing(function ($record) {
                         return \App\Models\LaporIzin::whereMonth('tanggal_izin', 2)
                             ->whereYear('tanggal_izin', 2024)
@@ -58,9 +65,14 @@ class SektorOverview extends BaseWidget
                                 $query->where('sektor_id', $record->id);
                             })
                             ->count();
-                    })->sortable(),
+                    })
+                    ->summarize(Summarizer::make()
+                        ->using(fn(Builder $query): string => LaporIzin::query()
+                            ->whereMonth('tanggal_izin', 2)
+                            ->whereYear('tanggal_izin', 2024)
+                            ->whereUserId(Auth::id())->count())),
                 TextColumn::make('maret')
-                    ->label('Maret')
+                    ->label('Mar')
                     ->getStateUsing(function ($record) {
                         return \App\Models\LaporIzin::whereMonth('tanggal_izin', 3)
                             ->whereYear('tanggal_izin', 2024)
@@ -69,9 +81,14 @@ class SektorOverview extends BaseWidget
                                 $query->where('sektor_id', $record->id);
                             })
                             ->count();
-                    })->sortable(),
+                    })
+                    ->summarize(Summarizer::make()
+                        ->using(fn(Builder $query): string => LaporIzin::query()
+                            ->whereMonth('tanggal_izin', 3)
+                            ->whereYear('tanggal_izin', 2024)
+                            ->whereUserId(Auth::id())->count())),
                 TextColumn::make('april')
-                    ->label('April')
+                    ->label('Apr')
                     ->getStateUsing(function ($record) {
                         return \App\Models\LaporIzin::whereMonth('tanggal_izin', 4)
                             ->whereYear('tanggal_izin', 2024)
@@ -80,7 +97,12 @@ class SektorOverview extends BaseWidget
                                 $query->where('sektor_id', $record->id);
                             })
                             ->count();
-                    })->sortable(),
+                    })
+                    ->summarize(Summarizer::make()
+                        ->using(fn(Builder $query): string => LaporIzin::query()
+                            ->whereMonth('tanggal_izin', 4)
+                            ->whereYear('tanggal_izin', 2024)
+                            ->whereUserId(Auth::id())->count())),
                 TextColumn::make('mei')
                     ->label('Mei')
                     ->getStateUsing(function ($record) {
@@ -91,7 +113,12 @@ class SektorOverview extends BaseWidget
                                 $query->where('sektor_id', $record->id);
                             })
                             ->count();
-                    })->sortable(),
+                    })
+                    ->summarize(Summarizer::make()
+                        ->using(fn(Builder $query): string => LaporIzin::query()
+                            ->whereMonth('tanggal_izin', 5)
+                            ->whereYear('tanggal_izin', 2024)
+                            ->whereUserId(Auth::id())->count())),
                 TextColumn::make('juni')
                     ->label('Juni')
                     ->getStateUsing(function ($record) {
@@ -102,7 +129,12 @@ class SektorOverview extends BaseWidget
                                 $query->where('sektor_id', $record->id);
                             })
                             ->count();
-                    })->sortable(),
+                    })
+                    ->summarize(Summarizer::make()
+                        ->using(fn(Builder $query): string => LaporIzin::query()
+                            ->whereMonth('tanggal_izin', 6)
+                            ->whereYear('tanggal_izin', 2024)
+                            ->whereUserId(Auth::id())->count())),
                 TextColumn::make('juli')
                     ->label('Juli')
                     ->getStateUsing(function ($record) {
@@ -113,9 +145,14 @@ class SektorOverview extends BaseWidget
                                 $query->where('sektor_id', $record->id);
                             })
                             ->count();
-                    })->sortable(),
+                    })
+                    ->summarize(Summarizer::make()
+                        ->using(fn(Builder $query): string => LaporIzin::query()
+                            ->whereMonth('tanggal_izin', 7)
+                            ->whereYear('tanggal_izin', 2024)
+                            ->whereUserId(Auth::id())->count())),
                 TextColumn::make('agustus')
-                    ->label('Agustus')
+                    ->label('Agus')
                     ->getStateUsing(function ($record) {
                         return \App\Models\LaporIzin::whereMonth('tanggal_izin', 8)
                             ->whereYear('tanggal_izin', 2024)
@@ -124,9 +161,14 @@ class SektorOverview extends BaseWidget
                                 $query->where('sektor_id', $record->id);
                             })
                             ->count();
-                    })->sortable(),
+                    })
+                    ->summarize(Summarizer::make()
+                        ->using(fn(Builder $query): string => LaporIzin::query()
+                            ->whereMonth('tanggal_izin', 8)
+                            ->whereYear('tanggal_izin', 2024)
+                            ->whereUserId(Auth::id())->count())),
                 TextColumn::make('september')
-                    ->label('September')
+                    ->label('Sep')
                     ->getStateUsing(function ($record) {
                         return \App\Models\LaporIzin::whereMonth('tanggal_izin', 9)
                             ->whereYear('tanggal_izin', 2024)
@@ -135,9 +177,14 @@ class SektorOverview extends BaseWidget
                                 $query->where('sektor_id', $record->id);
                             })
                             ->count();
-                    })->sortable(),
+                    })
+                    ->summarize(Summarizer::make()
+                        ->using(fn(Builder $query): string => LaporIzin::query()
+                            ->whereMonth('tanggal_izin', 9)
+                            ->whereYear('tanggal_izin', 2024)
+                            ->whereUserId(Auth::id())->count())),
                 TextColumn::make('oktober')
-                    ->label('Oktober')
+                    ->label('Okt')
                     ->getStateUsing(function ($record) {
                         return \App\Models\LaporIzin::whereMonth('tanggal_izin', 10)
                             ->whereYear('tanggal_izin', 2024)
@@ -146,9 +193,14 @@ class SektorOverview extends BaseWidget
                                 $query->where('sektor_id', $record->id);
                             })
                             ->count();
-                    })->sortable(),
+                    })
+                    ->summarize(Summarizer::make()
+                        ->using(fn(Builder $query): string => LaporIzin::query()
+                            ->whereMonth('tanggal_izin', 10)
+                            ->whereYear('tanggal_izin', 2024)
+                            ->whereUserId(Auth::id())->count())),
                 TextColumn::make('november')
-                    ->label('November')
+                    ->label('Nov')
                     ->getStateUsing(function ($record) {
                         return \App\Models\LaporIzin::whereMonth('tanggal_izin', 11)
                             ->whereYear('tanggal_izin', 2024)
@@ -157,9 +209,14 @@ class SektorOverview extends BaseWidget
                                 $query->where('sektor_id', $record->id);
                             })
                             ->count();
-                    })->sortable(),
+                    })
+                    ->summarize(Summarizer::make()
+                        ->using(fn(Builder $query): string => LaporIzin::query()
+                            ->whereMonth('tanggal_izin', 11)
+                            ->whereYear('tanggal_izin', 2024)
+                            ->whereUserId(Auth::id())->count())),
                 TextColumn::make('desember')
-                    ->label('Desember')
+                    ->label('Des')
                     ->getStateUsing(function ($record) {
                         return \App\Models\LaporIzin::whereMonth('tanggal_izin', 12)
                             ->whereYear('tanggal_izin', 2024)
@@ -168,7 +225,14 @@ class SektorOverview extends BaseWidget
                                 $query->where('sektor_id', $record->id);
                             })
                             ->count();
-                    })->sortable(),
-            ]);
+                    })
+                    ->summarize(Summarizer::make()
+                        ->using(fn(Builder $query): string => LaporIzin::query()
+                            ->whereMonth('tanggal_izin', 12)
+                            ->whereYear('tanggal_izin', 2024)
+                            ->whereUserId(Auth::id())->count())),
+            ])
+            // ->paginated(false)
+            ->striped();
     }
 }

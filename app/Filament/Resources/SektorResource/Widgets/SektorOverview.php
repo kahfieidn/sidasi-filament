@@ -38,6 +38,7 @@ class SektorOverview extends BaseWidget
             ])
             ->columns([
                 TextColumn::make('nama_sektor')
+                    ->searchable()
                     ->wrap(),
                 TextColumn::make('januari')
                     ->label('Jan')

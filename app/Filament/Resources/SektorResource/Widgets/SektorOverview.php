@@ -19,7 +19,7 @@ class SektorOverview extends BaseWidget
 {
 
     protected int | string | array $columnSpan = 'full';
-    protected static ?string $heading = 'Sektor Overview Non OSS';
+    protected static ?string $heading = 'Sektor Overview Non OSS 2024';
 
     public function table(Table $table): Table
     {

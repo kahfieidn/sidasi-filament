@@ -35,10 +35,10 @@
                             <!-- add your sub menu here -->
                         </li>
                         <li>
-                            <a href="{{route('statistik_data_perizinan')}}">Statistik Data Perizinan</a>
+                            <a href="/data" target="_blank">Statistik Data Perizinan</a>
                         </li>
                         <li>
-                            <a href="/data" target="_blank">Statistik Data Investasi</a>
+                            <a href="{{route('statistik_data_investasi')}}">Statistik Data Investasi</a>
                         </li>
                         <li>
                             <a href="/app">Login Sebagai Pengelola</a>
@@ -117,7 +117,7 @@
                                     <a class="main-menu-link" href="/">Homepage</a>
                                 </li>
                                 <li class="main-menu-item">
-                                    <a class="main-menu-link" href="{{route('statistik_data_perizinan')}}">Statistik Data Perizinan</a>
+                                    <a class="main-menu-link" href="/data" target="_blank">Statistik Data Perizinan</a>
                                 </li>
                                 <li class="main-menu-item">
                                     <a class="main-menu-link" href="{{route('statistik_data_investasi')}}">

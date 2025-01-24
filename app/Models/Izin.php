@@ -34,6 +34,9 @@ class Izin extends Model
         return $this->belongsTo(User::class, 'user_id');
     }
 
+    public function lapor_izin(){
+        return $this->hasMany(LaporIzin::class, 'izin_id');
+    }
 
     protected static function booted()
     {

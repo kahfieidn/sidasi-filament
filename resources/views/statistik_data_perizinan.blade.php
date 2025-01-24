@@ -38,7 +38,7 @@
                             <a href="{{route('statistik_data_perizinan')}}">Statistik Data Perizinan</a>
                         </li>
                         <li>
-                            <a href="{{route('statistik_data_investasi')}}">Statistik Data Investasi</a>
+                            <a href="/data" target="_blank">Statistik Data Investasi</a>
                         </li>
                         <li>
                             <a href="/app">Login Sebagai Pengelola</a>

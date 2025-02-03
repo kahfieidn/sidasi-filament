@@ -33,9 +33,7 @@ class LaporIzinImport implements ToCollection, WithHeadingRow, SkipsEmptyRows
             $izin = Izin::where('nama_izin', $row['jenis_izin'])->where('user_id', Auth::id())->pluck('id')->first();
             $tanggalMasuk = is_numeric($row['tanggal_masuk']) ? Date::excelToDateTimeObject($row['tanggal_masuk'])->format('Y-m-d') : null;
             $tanggalIzin = is_numeric($row['tanggal_izin']) ? Date::excelToDateTimeObject($row['tanggal_izin'])->format('Y-m-d') : null;
-
-
-
+            $alamat_proyek = $row['alamat_proyek'] ?? null;
 
             if ($izin === null) {
                 $rules['izin_' . $key] = 'required';
@@ -119,11 +117,12 @@ class LaporIzinImport implements ToCollection, WithHeadingRow, SkipsEmptyRows
             $izin = Izin::where('nama_izin', $row['jenis_izin'])->where('user_id', Auth::id())->pluck('id')->first();
             $tanggalMasuk = is_numeric($row['tanggal_masuk']) ? Date::excelToDateTimeObject($row['tanggal_masuk'])->format('Y-m-d') : null;
             $tanggalIzin = is_numeric($row['tanggal_izin']) ? Date::excelToDateTimeObject($row['tanggal_izin'])->format('Y-m-d') : null;
+            $alamat_proyek = $row['alamat_proyek'] ?? null;
 
             LaporIzin::create([
                 'nama_perusahaan' => $row['nama_perusahaan_or_perorangan'],
                 'alamat_perusahaan' => $row['alamat_perusahaan_or_perorangan'],
-                'alamat_proyek' => $row['alamat_proyek'],
+                'alamat_proyek' => $alamat_proyek,
                 'tanggal_masuk' => $tanggalMasuk,
                 'tanggal_izin' => $tanggalIzin,
                 'nomor_izin' => $row['nomor_izin'],

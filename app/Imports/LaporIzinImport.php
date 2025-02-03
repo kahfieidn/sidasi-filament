@@ -34,6 +34,15 @@ class LaporIzinImport implements ToCollection, WithHeadingRow, SkipsEmptyRows
             $tanggalMasuk = is_numeric($row['tanggal_masuk']) ? Date::excelToDateTimeObject($row['tanggal_masuk'])->format('Y-m-d') : null;
             $tanggalIzin = is_numeric($row['tanggal_izin']) ? Date::excelToDateTimeObject($row['tanggal_izin'])->format('Y-m-d') : null;
 
+
+            //validate kolom
+            if (!isset($row['alamat_proyek'])) {
+                $rules['alamat_proyek'] = 'required';
+                $customMessages['alamat_proyek.required'] = 'Kolom Alamat Proyek harus ada! Silahkan unduh template xls baru di menu Import Excel';
+                break;
+            }
+
+
             if ($izin === null) {
                 $rules['izin_' . $key] = 'required';
                 $customMessages['izin_' . $key . '.required'] = 'Perhatikan "' . $row['jenis_izin'] . '" Pada baris ' . ($key + 2) . ' tidak terdaftar';
